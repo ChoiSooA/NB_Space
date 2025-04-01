@@ -4,27 +4,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class AutoFade : MonoBehaviour
 {
-    Image fadeImage;
-    public EventSystem[] Change;    //다음 단계(미션, 씬 등 )로 넘어가기 위한 이벤트, 차례대로 실행되기 때문에 순서대로 넣어야함
+    public Image fadeImage;
+    public UnityEvent ChangeEvent;
     public float fadeDurationTime = 0.8f;
 
-    int eventCount = 0; 
-
+    int eventCount = 0;
     private void Start()
     {
-        fadeImage = GetComponent<Image>();
-        fadeImage.DOFade(0, 0f).SetEase(Ease.Linear).OnComplete(() => gameObject.SetActive(false)); //초기화
-    }
-    void OnEnable()
-    {
-        FadeInOut();
+        fadeImage.gameObject.SetActive(false);
     }
 
     public void FadeIn()
     {
+        fadeImage.gameObject.SetActive(true);
         fadeImage.DOFade(1, fadeDurationTime).SetEase(Ease.Linear);
     }
     public void FadeOut()
@@ -33,19 +29,16 @@ public class AutoFade : MonoBehaviour
     }
     public void FadeInOut()
     {
+        fadeImage.gameObject.SetActive(true);
+        FadeIn();
         StartCoroutine(FadeCoroutine());
     }
     IEnumerator FadeCoroutine()     //FadeIn -> FadeOut
     {
-        FadeIn();
         yield return new WaitForSeconds(fadeDurationTime*1.4f);
-        if(eventCount < Change.Length&& Change.Length == 0)     //순서대로 이벤트 실행, 클릭시 마다 다음 이벤트 실행
-        {
-            Change[eventCount].gameObject.SetActive(true);
-            eventCount++;
-        }
-            FadeOut();
+        //누를때마다 다음 이벤트 실행되는 기능 구현 예정
+        FadeOut();
         yield return new WaitForSeconds(fadeDurationTime);
-        gameObject.SetActive(false);
+        fadeImage.gameObject.SetActive(false);
     }
 }

@@ -1,44 +1,68 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using DG.Tweening;
 using TMPro;
 
 public class TextTyping : MonoBehaviour
 {
-    List<string> ment_string = new List<string>();
+    [SerializeField] private UnityEvent event_finish;   //타이핑이 끝나고 실행하고 싶은 이벤트
     TMP_Text outMent;
     public string[] addment;
+    bool coroutine_running = false;
+    string originalText;
 
-    float typingSpeed = 1.5f;
+    float typingSpeed = 0.1f;
 
     private void Start()
     {
-        //ment_string = GetComponent<TMP_Text>().text;
         outMent = this.GetComponent<TMP_Text>();
-        setMent();
-        StartCoroutine(NextText());
+        originalText = outMent.text;
+        outMent.text = "";
 
-    }
-
-    void setMent()
-    {
-        for (int i = 0; i < addment.Length; i++)
+        if (addment.Length > 0)
         {
-            ment_string.Add(addment[i]);
+            StartCoroutine(NextText());
+        }
+        else
+        {
+            Debug.Log("오리지널멘트실행됨");
+            outMent.DOText(originalText, originalText.Length * typingSpeed);
+            if (event_finish != null)
+            {
+                event_finish.Invoke();
+            }
+        }
+    }
+    private void OnEnable()
+    {
+        transform.parent.DOScale(transform.localScale * 0.95f, 0.2f).SetLoops(4, LoopType.Yoyo); //시작할 때 커지는 효과 주려고 넣음
+    }
+    private void OnDisable()
+    {
+        if (coroutine_running == true)
+        {
+            StopCoroutine(NextText());
+            coroutine_running = false;
         }
     }
 
     IEnumerator NextText()
     {
-        for (int i = 0; i < ment_string.Count; i++)
+        yield return new WaitForSeconds(1f);  //너무 바로 시작하는 것 같아서 조금 시간을 줌
+        coroutine_running = true;
+        for (int i = 0; i < addment.Length; i++)
         {
             outMent.text = "";
-            outMent.DOText(ment_string[i], typingSpeed);
-            float nextSpeed = ment_string[i].Length * typingSpeed;
-            yield return new WaitForSeconds(nextSpeed / 2);
+            float nextSpeed = addment[i].Length * typingSpeed;
+            outMent.DOText(addment[i], nextSpeed).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(nextSpeed+0.6f);
         }
-        yield return new WaitForSeconds(1f);
+        if (event_finish != null)
+        {
+            event_finish.Invoke();
+        }
+        coroutine_running = false;
+        yield return new WaitForSeconds(0.3f);
     }
 }

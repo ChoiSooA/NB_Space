@@ -4,14 +4,24 @@ using UnityEngine.EventSystems;
 
 public class TouchObjectDetector : MonoBehaviour
 {
+    public static TouchObjectDetector instance;
+
     public LayerMask targetLayer;
     public float rayDistance = 100f;
     public Camera mainCamera;
 
-    public GameObject touchObj;
+    public static GameObject touchObj;
 
     private void Start()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         if (mainCamera == null)
         {
             mainCamera = Camera.main;

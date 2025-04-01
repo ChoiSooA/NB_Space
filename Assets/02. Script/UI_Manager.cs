@@ -44,7 +44,7 @@ public class UI_Manager : MonoBehaviour
         });
         BT_Close.onClick.AddListener(() =>
         {
-            Setting_Effect.EndDoT();
+            Setting_Effect.Close();
         });
         BT_3D.onValueChanged.AddListener((bool value) =>
         {
@@ -64,7 +64,7 @@ public class UI_Manager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    private void OnOff3D()
+    public void OnOff3D()
     {
         is3D = !is3D;
 #if UNITY_EDITOR

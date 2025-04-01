@@ -20,8 +20,9 @@ public class FloatingObj : MonoBehaviour
     {
         // 랜덤한 이동 방향 및 거리 설정 (Y축 위아래로 + 살짝 X축도 움직이게)
         Vector3 randomOffset = new Vector3(
-            Random.Range(-0.3f, 0.3f), // X 방향 (좌우 흔들림)
-            Random.Range(0.5f, 1.0f), // Y 방향 (위아래 이동)
+            0f,
+            //Random.Range(-0.2f, 0.2f), // X 방향 (좌우 흔들림)
+            Random.Range(-0.2f, 0.3f), // Y 방향 (위아래 이동)
             0f
         );
 
