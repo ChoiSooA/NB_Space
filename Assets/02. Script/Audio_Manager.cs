@@ -74,9 +74,13 @@ public class Audio_Manager : MonoBehaviour
         BGM_audioSource.volume = volume;
     }
 
+    /// <summary>
+    /// 버튼 0, 맞음 1, 틀림 2, 박수 3, 성공 4
+    /// </summary>
     public void PlayEffect(int index)
     {
         Effect_audioSource.PlayOneShot(Effect_Clip[index]);
     }
+
 
 }
