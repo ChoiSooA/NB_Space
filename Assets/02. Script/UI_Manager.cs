@@ -60,11 +60,11 @@ public class UI_Manager : MonoBehaviour
         });
     }
 
-    void Restart()
+    public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    public void OnOff3D()
+    void OnOff3D()
     {
         is3D = !is3D;
 #if UNITY_EDITOR

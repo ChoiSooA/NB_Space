@@ -1,11 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class NextActive : MonoBehaviour
 {
+    [Header("Setting Start")]
+    public GameObject[] startTrueObject; //시작할때 활성화할 오브젝트
+    public GameObject[] startFalseObject; //시작할때 비활성화할 오브젝트
+    public UnityEvent startEvent;
+    [Header("Setting Next")]
     public GameObject[] trueObject;
     public GameObject[] falseObject;
+
+    private void OnEnable()
+    {
+        if (startFalseObject.Length == 0)
+        {
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < startFalseObject.Length; i++)
+            {
+                startFalseObject[i].SetActive(false);
+            }
+        }
+        if (startTrueObject.Length == 0)
+        {
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < startTrueObject.Length; i++)
+            {
+                startTrueObject[i].SetActive(true);
+            }
+        }
+
+        startEvent.Invoke();
+    }
 
     public void NextStill()
     {

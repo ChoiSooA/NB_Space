@@ -18,8 +18,10 @@ public class TextTyping : MonoBehaviour
     {
         outMent = this.GetComponent<TMP_Text>();
         originalText = outMent.text;
-        outMent.text = "";
-
+    }
+    private void OnEnable()
+    {
+        transform.parent.DOScale(transform.localScale * 0.95f, 0.2f).SetLoops(4, LoopType.Yoyo); //시작할 때 커지는 효과 주려고 넣음
         if (addment.Length > 0)
         {
             StartCoroutine(NextText());
@@ -27,24 +29,14 @@ public class TextTyping : MonoBehaviour
         else
         {
             Debug.Log("오리지널멘트실행됨");
-            outMent.DOText(originalText, originalText.Length * typingSpeed);
-            if (event_finish != null)
-            {
-                event_finish.Invoke();
-            }
+            StartCoroutine(FinishOriginalMent());
         }
-    }
-    private void OnEnable()
-    {
-        transform.parent.DOScale(transform.localScale * 0.95f, 0.2f).SetLoops(4, LoopType.Yoyo); //시작할 때 커지는 효과 주려고 넣음
     }
     private void OnDisable()
     {
-        if (coroutine_running == true)
-        {
-            StopCoroutine(NextText());
-            coroutine_running = false;
-        }
+        StopAllCoroutines();
+        outMent.DOKill();
+        outMent.text = "";
     }
 
     IEnumerator NextText()
@@ -64,5 +56,17 @@ public class TextTyping : MonoBehaviour
         }
         coroutine_running = false;
         yield return new WaitForSeconds(0.3f);
+    }
+    IEnumerator FinishOriginalMent()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log("오리지널멘트실행됨");
+        float nextSpeed = originalText.Length * typingSpeed;
+        outMent.DOText(originalText, originalText.Length * typingSpeed);
+        yield return new WaitForSeconds(nextSpeed);
+        if (event_finish != null)
+        {
+            event_finish.Invoke();
+        }
     }
 }

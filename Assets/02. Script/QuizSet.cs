@@ -86,9 +86,11 @@ public class QuizSet : MonoBehaviour
     {
         Debug.Log("checkQuiz ½ÇÇàµÊ!");
         WrightPannel.SetActive(true);
-        WrightPannel.transform.DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
+        WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
         yield return new WaitForSeconds(1.5f);
-        WrightPannel.transform.DOScale(WrightPannel.transform.localScale * 0.8f, 0.5f).SetEase(Ease.OutBack);
+        WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 0.8f, 0.5f).SetEase(Ease.OutBack);
+        yield return new WaitForSeconds(0.3f);
+        WrightPannel.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
         WrightPannel.SetActive(false);
         showQuiz(); 
         if (zoomObj != null)
