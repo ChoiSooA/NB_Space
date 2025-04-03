@@ -13,6 +13,8 @@ public class AnimationController : MonoBehaviour
 
     int count = 0;
 
+    bool isPlaying = false;
+
     private void Awake()
     {
         resetPosition = Character.transform.localPosition;
@@ -22,16 +24,7 @@ public class AnimationController : MonoBehaviour
     {
         PlayAnimation("Jump");
         Character.transform.DOMoveY(-1.5f, 0.7f).SetEase(Ease.Linear);
-        switch(count)
-        {
-            case 0:
-                StartCoroutine(AnimOne());
-                break;
-            case 1:
-                StartCoroutine(AnimTwo());
-                break;
-        }
-        count++;
+        playAnimSet();
     }
     private void OnDisable()
     {
@@ -44,8 +37,26 @@ public class AnimationController : MonoBehaviour
         animator.SetTrigger(animationName);
     }
 
+    void playAnimSet()
+    {
+        if (isPlaying == false)
+        {
+            switch (count)
+            {
+                case 0:
+                    StartCoroutine(AnimOne());
+                    break;
+                case 1:
+                    StartCoroutine(AnimTwo());
+                    break;
+            }
+            count++;
+        }
+    }
+
     IEnumerator AnimOne()
     {
+        isPlaying = true;
         yield return new WaitForSeconds(1f);
         PlayAnimation("Hi");
         yield return new WaitForSeconds(1.7f);
@@ -54,9 +65,11 @@ public class AnimationController : MonoBehaviour
         PlayAnimation("Nice");
         yield return new WaitForSeconds(3f);
         PlayAnimation("Idle");
+        isPlaying = false;
     }
     IEnumerator AnimTwo()
     {
+        isPlaying = true;
         yield return new WaitForSeconds(1f);
         PlayAnimation("Clap");
         yield return new WaitForSeconds(2f);
@@ -65,5 +78,6 @@ public class AnimationController : MonoBehaviour
         PlayAnimation("Cheer");
         yield return new WaitForSeconds(3f);
         PlayAnimation("Idle");
+        isPlaying = false;
     }
 }

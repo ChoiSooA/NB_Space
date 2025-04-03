@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class QuizSet : MonoBehaviour
 {
@@ -73,7 +74,6 @@ public class QuizSet : MonoBehaviour
             currentQuiz++;
             Audio_Manager.Instance.PlayEffect(4);   //정답 소리
             Audio_Manager.Instance.PlayEffect(3);   //박수 소리
-            WrightPannel.SetActive(true);
             StartCoroutine(nextQuiz());
         }
         else                                                //오답
@@ -84,7 +84,11 @@ public class QuizSet : MonoBehaviour
 
     IEnumerator nextQuiz()
     {
+        Debug.Log("checkQuiz 실행됨!");
+        WrightPannel.SetActive(true);
+        WrightPannel.transform.DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
         yield return new WaitForSeconds(1.5f);
+        WrightPannel.transform.DOScale(WrightPannel.transform.localScale * 0.8f, 0.5f).SetEase(Ease.OutBack);
         WrightPannel.SetActive(false);
         showQuiz(); 
         if (zoomObj != null)

@@ -7,7 +7,7 @@ using LeiaUnity;
 
 public class UI_Manager : MonoBehaviour
 {
-    LeiaDisplay display;
+    public LeiaDisplay display;
     public Button BT_Option;
     public Button BT_Exit;
     public Button BT_Restart;
@@ -22,7 +22,7 @@ public class UI_Manager : MonoBehaviour
     public GameObject Option_Panel;
 
 
-    bool is3D = false;
+    bool is3D = true;
     bool isMute = false;
 
     void Awake()
