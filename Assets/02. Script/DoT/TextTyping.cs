@@ -14,21 +14,21 @@ public class TextTyping : MonoBehaviour
 
     float typingSpeed = 0.1f;
 
-    private void Start()
+    private void Awake()
     {
         outMent = this.GetComponent<TMP_Text>();
         originalText = outMent.text;
     }
     private void OnEnable()
     {
+        outMent.text = "";
         transform.parent.DOScale(transform.localScale * 0.95f, 0.2f).SetLoops(4, LoopType.Yoyo); //시작할 때 커지는 효과 주려고 넣음
         if (addment.Length > 0)
         {
             StartCoroutine(NextText());
         }
-        else
+        else if(addment.Length == 0 && originalText != null) //addment가 없고 originalText가 있을 때
         {
-            Debug.Log("오리지널멘트실행됨");
             StartCoroutine(FinishOriginalMent());
         }
     }
@@ -62,8 +62,8 @@ public class TextTyping : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Debug.Log("오리지널멘트실행됨");
         float nextSpeed = originalText.Length * typingSpeed;
-        outMent.DOText(originalText, originalText.Length * typingSpeed);
-        yield return new WaitForSeconds(nextSpeed);
+        outMent.DOText(originalText, nextSpeed).SetEase(Ease.Linear);
+        yield return new WaitForSeconds(nextSpeed + 0.6f);
         if (event_finish != null)
         {
             event_finish.Invoke();

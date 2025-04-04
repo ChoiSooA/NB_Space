@@ -12,15 +12,14 @@ public class QuizSet : MonoBehaviour
         public string answer;
         public string question;
     }
-    public TMP_Text questionText;   //질문이 출력될 텍스트
-    public List<Quiz> quizList = new List<Quiz>();  //퀴즈 리스트
-    public TMP_Text changeText;  //완료되었을때 다음 버튼의 텍스트를 변경해줄 변수
+
+    public TMP_Text questionText;   // 질문이 출력될 텍스트
+    public List<Quiz> quizList = new List<Quiz>();  // 퀴즈 리스트
+    public TMP_Text changeText;  // 완료되었을 때 버튼의 텍스트를 변경해줄 변수
     public GameObject nextButton;
     public GameObject WrightPannel;
-    int currentQuiz = 0;    //현재 퀴즈 번호
-    GameObject zoomObj; //현재 선택한 오브젝트(정답판정을 위해)
-
-
+    int currentQuiz = 0;    // 현재 퀴즈 번호
+    GameObject zoomObj;     // 현재 선택한 오브젝트 (정답 판정을 위해)
 
     private void Start()
     {
@@ -38,9 +37,10 @@ public class QuizSet : MonoBehaviour
         MixQuiz();
         showQuiz();
     }
+
     void MixQuiz()
     {
-        for (int i = quizList.Count -1; i > 0; i--)
+        for (int i = quizList.Count - 1; i > 0; i--)
         {
             int rnd = UnityEngine.Random.Range(0, i);
             Quiz temp = quizList[i];
@@ -51,32 +51,25 @@ public class QuizSet : MonoBehaviour
 
     void showQuiz()
     {
-        if (currentQuiz == quizList.Count)
-        {
-            WrightPannel.SetActive(true);
-            questionText.text = "";
-            changeText.text= "모든 퀴즈를 풀었어요!";
-            nextButton.SetActive(true);
-        }
-        else
+        if (currentQuiz < quizList.Count)
         {
             questionText.text = quizList[currentQuiz].question;
-            
         }
     }
 
     public void checkQuiz()
     {
         zoomObj = TouchObjectDetector.touchObj;
-        if (zoomObj.name == quizList[currentQuiz].answer)   //정답
+
+        if (zoomObj.name == quizList[currentQuiz].answer) // 정답
         {
             zoomObj.GetComponent<Collider>().enabled = false;
-            currentQuiz++;
-            Audio_Manager.Instance.PlayEffect(4);   //정답 소리
-            Audio_Manager.Instance.PlayEffect(3);   //박수 소리
-            StartCoroutine(nextQuiz());
+            Audio_Manager.Instance.PlayEffect(4);   // 정답 소리
+            Audio_Manager.Instance.PlayEffect(3);   // 박수 소리
+
+            StartCoroutine(nextQuiz());  // 정답 패널 보여준 후 퀴즈 상태 처리
         }
-        else                                                //오답
+        else // 오답
         {
             Audio_Manager.Instance.PlayEffect(2);
         }
@@ -84,7 +77,6 @@ public class QuizSet : MonoBehaviour
 
     IEnumerator nextQuiz()
     {
-        Debug.Log("checkQuiz 실행됨!");
         WrightPannel.SetActive(true);
         WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
         yield return new WaitForSeconds(1.5f);
@@ -92,11 +84,25 @@ public class QuizSet : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         WrightPannel.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
         WrightPannel.SetActive(false);
-        showQuiz(); 
-        if (zoomObj != null)
+
+        currentQuiz++;  // 여기서 퀴즈 카운트 증가
+
+        if (currentQuiz == quizList.Count)
         {
-            zoomObj.GetComponent<Collider>().enabled = true;
+            // 퀴즈 모두 완료 처리
+            questionText.text = "";
+            WrightPannel.SetActive(true);
+            changeText.text = "모든 퀴즈를 풀었어요!";
+            nextButton.SetActive(true);
+        }
+        else
+        {
+            // 다음 퀴즈 보여주기
+            showQuiz();
+            if (zoomObj != null)
+            {
+                zoomObj.GetComponent<Collider>().enabled = true;
+            }
         }
     }
-
 }

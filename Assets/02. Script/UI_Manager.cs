@@ -63,6 +63,7 @@ public class UI_Manager : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Setting_Effect.Close();
     }
     void OnOff3D()
     {
