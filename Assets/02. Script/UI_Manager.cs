@@ -36,7 +36,7 @@ public class UI_Manager : MonoBehaviour
         });
         BT_Exit.onClick.AddListener(() =>
         {
-            Application.Quit();
+            Quit();
         });
         BT_Restart.onClick.AddListener(() =>
         {
@@ -59,7 +59,10 @@ public class UI_Manager : MonoBehaviour
             SetBgmVolume();
         });
     }
-
+    public void Quit()
+    {
+        Application.Quit();
+    }
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
