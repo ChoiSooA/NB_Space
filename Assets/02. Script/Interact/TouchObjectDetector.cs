@@ -85,6 +85,7 @@ public class TouchObjectDetector : MonoBehaviour
 
             if (target.GetComponent<TouchSelf>() != null)
             {
+                Audio_Manager.Instance.PlayEffect(0);
                 target.GetComponent<TouchSelf>().OnClick();
                 target.transform.DOScale(target.transform.localScale * 0.9f, 0.1f).SetLoops(2, LoopType.Yoyo);
             }

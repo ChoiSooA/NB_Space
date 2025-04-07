@@ -21,12 +21,19 @@ public class UI_Manager : MonoBehaviour
 
     public GameObject Option_Panel;
 
+    Button[] buttons;
+
 
     bool is3D = true;
     bool isMute = false;
 
     void Awake()
     {
+        buttons = Resources.FindObjectsOfTypeAll<Button>();
+        foreach (Button btn in buttons)
+        {
+            btn.onClick.AddListener(() => audioManager.PlayEffect(0));
+        }
         audioManager = FindAnyObjectByType<Audio_Manager>();
 
         audioManager.Current_BGM_Volume = Slider_BGM_Sound.value;
@@ -48,10 +55,12 @@ public class UI_Manager : MonoBehaviour
         });
         BT_3D.onValueChanged.AddListener((bool value) =>
         {
+            audioManager.PlayEffect(0);
             OnOff3D();
         });
         BT_BGM_Sound.onValueChanged.AddListener((bool value) =>
         {
+            audioManager.PlayEffect(0);
             OnOffBGM();
         });
         Slider_BGM_Sound.onValueChanged.AddListener((float value) =>
