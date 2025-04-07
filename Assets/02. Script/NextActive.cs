@@ -43,7 +43,7 @@ public class NextActive : MonoBehaviour
 
     public void NextStill()
     {
-        StartCoroutine(Next(1f));
+        StartCoroutine(Next(1.2f));
     }
 
     IEnumerator Next(float time)
