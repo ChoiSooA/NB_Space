@@ -23,6 +23,7 @@ public class ZoomClick : MonoBehaviour
         public string title;
         [TextArea(2, 5)]
         public string content;
+        public AudioClip audioClip;
     }
 
     public SpaceObjectInfo[] spaceObjectInfos;
@@ -49,15 +50,19 @@ public class ZoomClick : MonoBehaviour
     }
     public void ZoomOut()
     {
-        GameObject zoomObj = TouchObjectDetector.touchObj;
-        zoomObj.transform.DOMove(originalPos, 1f);
-        zoomObj.transform.DORotate(originalRotation, 1f);
-        zoomObj.transform.DOScale(originalScale, 1f);
-        foreach (GameObject obj in SpaceObjects)
+        if(TouchObjectDetector.touchObj != null)
         {
-            obj.SetActive(true);
+            GameObject zoomObj = TouchObjectDetector.touchObj;
+            zoomObj.transform.DOMove(originalPos, 1f);
+            zoomObj.transform.DORotate(originalRotation, 1f);
+            zoomObj.transform.DOScale(originalScale, 1f);
+            foreach (GameObject obj in SpaceObjects)
+            {
+                obj.SetActive(true);
+            }
+            StartCoroutine(Back(zoomObj));
         }
-        StartCoroutine(Back(zoomObj));
+        
     }
 
     void SetInfoByName(string objName)
@@ -69,6 +74,10 @@ public class ZoomClick : MonoBehaviour
             {
                 Text_Info_Title.text = info.title;
                 Text_Info_Content.text = info.content;
+                if (info.audioClip != null)
+                {
+                    Audio_Manager.Instance.PlayMent(info.audioClip);
+                }
                 return;
             }
         }

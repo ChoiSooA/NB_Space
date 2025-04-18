@@ -6,6 +6,7 @@ public class Audio_Manager : MonoBehaviour
 {
     public AudioSource BGM_audioSource;
     public AudioSource Effect_audioSource;
+    public AudioSource Ment_audioSources;
     public AudioClip Bgm_Clip;
     public AudioClip[] Effect_Clip;
 
@@ -45,7 +46,16 @@ public class Audio_Manager : MonoBehaviour
             Effect_audioSource = transform.GetChild(1).gameObject.GetComponent<AudioSource>();
         }
 
-        if(Bgm_Clip != null)
+        if (Ment_audioSources == null)
+        {
+            Ment_audioSources = transform.GetChild(2).gameObject.AddComponent<AudioSource>();
+        }
+        else
+        {
+            Ment_audioSources = transform.GetChild(2).gameObject.GetComponent<AudioSource>();
+        }
+
+        if (Bgm_Clip != null)
         {
             BGM_audioSource.clip = Bgm_Clip;
             BGM_audioSource.loop = true;
@@ -82,5 +92,13 @@ public class Audio_Manager : MonoBehaviour
         Effect_audioSource.PlayOneShot(Effect_Clip[index]);
     }
 
-
+    public void PlayMent(AudioClip clip)
+    {
+        if(Ment_audioSources.clip != null)
+        {
+            Ment_audioSources.Stop();
+        }
+        Ment_audioSources.clip = clip;
+        Ment_audioSources.Play();
+    }
 }

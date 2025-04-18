@@ -11,6 +11,7 @@ public class QuizSet : MonoBehaviour
     {
         public string answer;
         public string question;
+        public AudioClip audioClip;
     }
 
     public TMP_Text questionText;   // 질문이 출력될 텍스트
@@ -20,6 +21,7 @@ public class QuizSet : MonoBehaviour
     public GameObject WrightPannel;
     int currentQuiz = 0;    // 현재 퀴즈 번호
     GameObject zoomObj;     // 현재 선택한 오브젝트 (정답 판정을 위해)
+
 
     private void Start()
     {
@@ -54,6 +56,10 @@ public class QuizSet : MonoBehaviour
         if (currentQuiz < quizList.Count)
         {
             questionText.text = quizList[currentQuiz].question;
+            if (quizList[currentQuiz].audioClip != null)
+            {
+                Audio_Manager.Instance.PlayMent(quizList[currentQuiz].audioClip);
+            }
         }
     }
 
@@ -66,43 +72,44 @@ public class QuizSet : MonoBehaviour
             zoomObj.GetComponent<Collider>().enabled = false;
             Audio_Manager.Instance.PlayEffect(4);   // 정답 소리
             Audio_Manager.Instance.PlayEffect(3);   // 박수 소리
+            Audio_Manager.Instance.Ment_audioSources.Stop();
 
             StartCoroutine(nextQuiz());  // 정답 패널 보여준 후 퀴즈 상태 처리
         }
         else // 오답
         {
             Audio_Manager.Instance.PlayEffect(2);
+            Audio_Manager.Instance.PlayMent(quizList[currentQuiz].audioClip);
         }
     }
 
     IEnumerator nextQuiz()
     {
-        WrightPannel.SetActive(true);
-        WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(1.5f);
-        WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 0.8f, 0.5f).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(0.3f);
-        WrightPannel.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-        WrightPannel.SetActive(false);
-
         currentQuiz++;  // 여기서 퀴즈 카운트 증가
-
         if (currentQuiz == quizList.Count)
         {
             // 퀴즈 모두 완료 처리
             questionText.text = "";
-            WrightPannel.SetActive(true);
             changeText.text = "모든 퀴즈를 풀었어요!";
             nextButton.SetActive(true);
         }
-        else
+        WrightPannel.SetActive(true);
+        WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 1.2f, 0.5f).SetEase(Ease.OutBack);
+        yield return new WaitForSeconds(1.5f);
+
+
+        if (currentQuiz != quizList.Count)
         {
+            WrightPannel.transform.GetChild(0).DOScale(WrightPannel.transform.localScale * 0.8f, 0.5f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.3f);
             // 다음 퀴즈 보여주기
             showQuiz();
             if (zoomObj != null)
             {
                 zoomObj.GetComponent<Collider>().enabled = true;
             }
+            WrightPannel.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+            WrightPannel.SetActive(false);
         }
     }
 }

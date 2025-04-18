@@ -9,10 +9,11 @@ public class TextTyping : MonoBehaviour
     [SerializeField] private UnityEvent event_finish;   //타이핑이 끝나고 실행하고 싶은 이벤트
     TMP_Text outMent;
     public string[] addment;
+    public AudioClip[] mentClip;
     bool coroutine_running = false;
     string originalText;
 
-    float typingSpeed = 0.1f;
+    public float typingSpeed = 0.15f;
 
     private void Awake()
     {
@@ -46,6 +47,8 @@ public class TextTyping : MonoBehaviour
         for (int i = 0; i < addment.Length; i++)
         {
             outMent.text = "";
+            if(mentClip[i]!=null)
+                Audio_Manager.Instance.PlayMent(mentClip[i]);
             float nextSpeed = addment[i].Length * typingSpeed;
             outMent.DOText(addment[i], nextSpeed).SetEase(Ease.Linear);
             yield return new WaitForSeconds(nextSpeed+0.6f);
@@ -61,6 +64,7 @@ public class TextTyping : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Debug.Log("오리지널멘트실행됨");
+        Audio_Manager.Instance.PlayMent(mentClip[0]);
         float nextSpeed = originalText.Length * typingSpeed;
         outMent.DOText(originalText, nextSpeed).SetEase(Ease.Linear);
         yield return new WaitForSeconds(nextSpeed + 0.6f);

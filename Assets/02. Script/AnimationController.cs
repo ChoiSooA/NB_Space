@@ -56,7 +56,7 @@ public class AnimationController : MonoBehaviour
         PlayAnimation("Hi");
         yield return new WaitForSeconds(1.7f);
         PlayAnimation("Idle");
-        yield return new WaitForSeconds(15f);   //마지막 nice 전까지 대기 시간
+        yield return new WaitForSeconds(23f);   //마지막 nice 전까지 대기 시간
         PlayAnimation("Nice");
         yield return new WaitForSeconds(3f);
         PlayAnimation("Idle");
@@ -70,7 +70,7 @@ public class AnimationController : MonoBehaviour
         PlayAnimation("Clap");
         yield return new WaitForSeconds(2f);
         PlayAnimation("Idle");
-        yield return new WaitForSeconds(4f);    //마지막 cheer 전까지 대기 시간
+        yield return new WaitForSeconds(6f);    //마지막 cheer 전까지 대기 시간
         PlayAnimation("Cheer");
         yield return new WaitForSeconds(3f);
         PlayAnimation("Idle");
@@ -85,7 +85,7 @@ public class AnimationController : MonoBehaviour
         Audio_Manager.Instance.PlayEffect(3);
         yield return new WaitForSeconds(2.2f);
         PlayAnimation("Idle");
-        yield return new WaitForSeconds(9f);    //마지막 clap 전까지 대기 시간
+        yield return new WaitForSeconds(12f);    //마지막 clap 전까지 대기 시간
         PlayAnimation("Hi");
     }
 }
